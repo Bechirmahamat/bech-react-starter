@@ -2,3 +2,9 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer components {
+    .static-width {
+        @apply max-w-6xl mx-auto px-8;
+    }
+}

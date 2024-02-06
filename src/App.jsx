@@ -1,4 +1,4 @@
-import { RouterProvider, createBrowserRouter } from "react-router-dom";
+import { RouterProvider, createBrowserRouter, json } from "react-router-dom";
 import {
     About,
     HomeLayout,
@@ -10,6 +10,7 @@ import {
     Cart,
     Landing,
 } from "./pages/index";
+
 const router = createBrowserRouter([
     {
         path: "/",
@@ -50,6 +51,9 @@ const router = createBrowserRouter([
     },
 ]);
 function App() {
+    // get theme from local host
+
+    // end of setting theme
     return (
         <>
             <RouterProvider router={router}></RouterProvider>
