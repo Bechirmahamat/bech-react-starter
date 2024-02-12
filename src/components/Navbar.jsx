@@ -1,8 +1,9 @@
 import { FaBarsStaggered } from "react-icons/fa6";
 import { BsCart3 } from "react-icons/bs";
 import NavLinks from "./Navlinks";
-import { useEffect, useState } from "react";
-import theme from "@material-tailwind/react/theme";
+import { useDispatch, useSelector } from "react-redux";
+import { Link } from "react-router-dom";
+import { setTheme } from "../features/user/userSlice";
 const themes = [
     {
         name: "Light",
@@ -29,32 +30,34 @@ const themes = [
         theme: "cmyk",
     },
 ];
-const localTheme = localStorage.getItem("theme") || "dracula";
 
 const Navbar = () => {
-    const [theme, setTheme] = useState(localTheme);
+    const dispatch = useDispatch();
+    const { numItemsInCart } = useSelector((store) => store.cart);
+    const { user, theme: themeSelected } = useSelector(
+        (store) => store.userState
+    );
     const handleTheme = (theme) => {
-        setTheme(theme);
+        dispatch(setTheme(theme));
     };
-    useEffect(() => {
-        document.documentElement.setAttribute("data-theme", theme);
-        localStorage.setItem("theme", theme);
-    }, [theme]);
+
     return (
         <nav className="bg-base-200 ">
             <div className="static-width navbar">
                 <div className="navbar-start">
                     {/* LOGO */}
-                    <h3 className="hidden md:flex bg-primary btn  text-3xl text-white">
-                        B
-                    </h3>
+                    <Link to="/">
+                        <h3 className="hidden md:block bg-primary py-2 font-bold px-4 text-3xl rounded-md">
+                            B
+                        </h3>
+                    </Link>
                     <div className="dropdown  md:hidden">
                         <label tabIndex={0} className="btn btn-md btn-ghost">
                             <FaBarsStaggered className="text-2xl" />
                         </label>
                         <div
                             tabIndex={0}
-                            className="menu bg-base-200 w-52 dropdown-content mt-3 rounded-md shadow "
+                            className="menu bg-base-200 w-52 dropdown-content z-[1] mt-3 rounded-md shadow "
                         >
                             <NavLinks />
                         </div>
@@ -65,7 +68,7 @@ const Navbar = () => {
                         <NavLinks />
                     </ul>
                 </div>
-                <div className=" navbar-end flex gap-2 ">
+                <div className=" navbar-end flex  gap-2 ">
                     <div className="dropdown">
                         <label tabIndex={0} className="" htmlFor="">
                             <button className="btn btn-ghost flex-nowrap">
@@ -82,13 +85,17 @@ const Navbar = () => {
                             </button>
                             <div
                                 tabIndex={0}
-                                className="dropdown-content rounded-md menu bg-base-200 mt-3"
+                                className="dropdown-content z-[1] rounded-md menu bg-base-200 mt-3"
                             >
                                 {themes.map((theme, index) => {
                                     return (
                                         <li key={index}>
                                             <button
-                                                className="capitalize"
+                                                className={` ${
+                                                    theme.theme == themeSelected
+                                                        ? "active"
+                                                        : ""
+                                                }`}
                                                 onClick={() =>
                                                     handleTheme(theme.theme)
                                                 }
@@ -103,10 +110,10 @@ const Navbar = () => {
                     </div>
                     <div className="indicator  ">
                         <span className="indicator-item  top-3 right-3 badge badge-primary">
-                            3
+                            {numItemsInCart}
                         </span>
 
-                        <button className="text-3xl btn btn-ghost btn-circle">
+                        <button className="text-2xl btn btn-ghost btn-circle">
                             <BsCart3 />
                         </button>
                     </div>
